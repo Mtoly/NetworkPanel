@@ -32,7 +32,7 @@ jobs:
           name: network-panel-build
           path: dist/
           retention-days: 30
-
+ 
   deploy:
     needs: build
     runs-on: ubuntu-latest
