@@ -111,7 +111,7 @@ const copy = (ip: string) => {
 }
 
 async function queryIp(ip: string) {
-    const rsp = await fetch(import.meta.env.VITE_API_URL + "ip.ajax?ip=" + ip, {
+    const rsp = await fetch(import.meta.env.VITE_API_URL + "?ip=" + ip, {
         method: "GET",
         mode: "cors",
         redirect: "follow",
