@@ -1,0 +1,36 @@
+name: Build NetworkPanel
+
+on:
+  # 当代码推送到 main 分支时触发工作流
+  push:
+    branches:
+      - main
+  # 也可以手动触发工作流
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 设置 Node.js 环境
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # 安装依赖
+      - name: Install dependencies
+        run: npm install
+
+      # 构建项目
+      - name: Build project
+        run: npm run build
+
+      # 可以根据需要添加更多步骤，例如部署到服务器
+      # - name: Deploy to server
+      #   run: ...
