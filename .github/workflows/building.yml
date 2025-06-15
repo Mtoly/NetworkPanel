@@ -1,4 +1,4 @@
-name: Build NetworkPanel
+name: Build and Deploy NetworkPanel
 
 on:
   push:
@@ -25,9 +25,9 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # 上传构建产物（更新到 v4）
+      # 上传构建产物（关键更新：从 v3 到 v4）
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4  # 关键更新点
+        uses: actions/upload-artifact@v4
         with:
           name: network-panel-build
           path: dist/
@@ -44,7 +44,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Download build artifact
-        uses: actions/download-artifact@v4  # 关键更新点
+        uses: actions/download-artifact@v4  # 关键更新：从 v3 到 v4
         with:
           name: network-panel-build
           path: dist
@@ -52,7 +52,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4  # 更新到 v4
 
-      - name: Upload artifact
+      - name: Upload artifact to Pages
         uses: actions/upload-pages-artifact@v2  # 保持最新版本
 
       - name: Deploy to GitHub Pages
