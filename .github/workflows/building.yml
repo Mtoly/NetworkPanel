@@ -12,12 +12,13 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  # 更新到 v4
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4  # 更新到 v4
+        uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
@@ -25,13 +26,12 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # 上传构建产物（关键更新：从 v3 到 v4）
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: network-panel-build
           path: dist/
-          retention-days: 7
+          retention-days: 30
 
   deploy:
     needs: build
@@ -44,17 +44,19 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Download build artifact
-        uses: actions/download-artifact@v4  # 关键更新：从 v3 到 v4
+        uses: actions/download-artifact@v4
         with:
           name: network-panel-build
           path: dist
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4  # 更新到 v4
+        uses: actions/configure-pages@v4
 
-      - name: Upload artifact to Pages
-        uses: actions/upload-pages-artifact@v2  # 保持最新版本
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: dist
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2  # 保持最新版本
+        uses: actions/deploy-pages@v2    
