@@ -1,4 +1,4 @@
-name: Build and Deploy NetworkPanel
+name: Build NetworkPanel
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.1  # 指定确切版本
+        uses: actions/checkout@v4.1.1
 
       - name: Set up Node.js
         uses: actions/setup-node@v4.0.2
@@ -34,41 +34,8 @@ jobs:
           cat ~/.github/actions/actions/download-artifact/action.yml | grep '^name:' || echo "Not found"
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4.3.1  # 指定确切版本
+        uses: actions/upload-artifact@v4.3.1
         with:
           name: network-panel-build
           path: dist/
           retention-days: 30
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v4.2.0  # 指定确切版本
-        with:
-          name: network-panel-build
-          path: dist
-
-      - name: Debug downloaded artifact
-        run: |
-          ls -la dist
-          echo "Artifact size:"
-          du -sh dist
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4.0.1
-
-      - name: Upload to GitHub Pages
-        uses: actions/upload-pages-artifact@v2.1.5
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2.1.4
-    
