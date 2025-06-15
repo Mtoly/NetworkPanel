@@ -12,10 +12,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4  # 更新到 v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4  # 更新到 v4
         with:
           node-version: 18
 
@@ -25,10 +25,36 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # 新增：上传构建产物
+      # 上传构建产物（更新到 v4）
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # 关键更新点
         with:
-          name: network-panel-build  # 产物名称，可自定义
-          path: dist/  # 构建输出目录，根据项目配置修改
-          retention-days: 7  # 保留7天
+          name: network-panel-build
+          path: dist/
+          retention-days: 7
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4  # 关键更新点
+        with:
+          name: network-panel-build
+          path: dist
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4  # 更新到 v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2  # 保持最新版本
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2  # 保持最新版本
